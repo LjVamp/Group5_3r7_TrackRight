@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: 40,
   },
-  datePicker: { },
+  datePicker: {},
   dateItem: {
     height: "20%",
     padding: 8,
