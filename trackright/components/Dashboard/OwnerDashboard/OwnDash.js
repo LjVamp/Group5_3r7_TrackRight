@@ -9,19 +9,12 @@ import {
   Modal,
   ScrollView,
 } from "react-native";
-import { Card, Button, Chip } from "react-native-paper";
+import { Avatar, Button, Card, Chip } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
 const OwnDash = () => {
-  const [employees, setEmployees] = useState([
-    { id: "1", name: "Ledy Joy Bandiola", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
-    { id: "2", name: "Nathalie Jugapao", timeIn: "10:38 AM", timeOut: "05:05 PM", breakTime: "01:05 hr" },
-    { id: "3", name: "Afiah Gino", timeIn: "09:40 AM", timeOut: "04:44 PM", breakTime: "01:00 hr" },
-    { id: "4", name: "Rex Arnado", timeIn: "09:00 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
-    { id: "5", name: "Marben Cańizares", timeIn: "08:40 AM", timeOut: "04:40 PM", breakTime: "01:00 hr" },
-  ]);
-
+  const [employees, setEmployees] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isNotifVisible, setIsNotifVisible] = useState(false); // For notifications
   const [isBurgerMenuVisible, setIsBurgerMenuVisible] = useState(false); // For burger menu
@@ -35,9 +28,10 @@ const OwnDash = () => {
       const newEmployee = {
         id: (employees.length + 1).toString(),
         name: `${firstName} ${lastName}`,
-        timeIn: "N/A", // Placeholder for now
-        timeOut: "N/A", // Placeholder for now
-        breakTime: "N/A", // Placeholder for now
+        empId: `202130${Math.floor(Math.random() * 10000)}`, // Random employee ID
+        timeIn: "--:-- AM/PM", // Placeholder for now
+        timeOut: "--:-- AM/PM", // Placeholder for now
+        breakTime: "--:--:--hr", // Placeholder for now
       };
       setEmployees([...employees, newEmployee]);
       setFirstName("");
@@ -60,45 +54,6 @@ const OwnDash = () => {
           <Icon name="notifications" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-
-      {/* Burger Menu Modal */}
-      <Modal visible={isBurgerMenuVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Menu</Text>
-            <Button
-              mode="text"
-              onPress={() => {
-                navigation.navigate("OwnProfile");
-                setIsBurgerMenuVisible(false);
-              }}
-            >
-              Profile
-            </Button>
-            <Button
-              mode="text"
-              onPress={() => {
-                navigation.navigate("Login");
-                setIsBurgerMenuVisible(false);
-              }}
-            >
-              Logout
-            </Button>
-            <Button onPress={() => setIsBurgerMenuVisible(false)}>Close</Button>
-          </View>
-        </View>
-      </Modal>
-
-      {/* Notifications Modal */}
-      <Modal visible={isNotifVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Notifications</Text>
-            <Text>No new notifications!</Text>
-            <Button onPress={() => setIsNotifVisible(false)}>Close</Button>
-          </View>
-        </View>
-      </Modal>
 
       {/* Date Picker */}
       <FlatList
@@ -128,31 +83,49 @@ const OwnDash = () => {
         <Chip style={styles.chip}>Deactivated</Chip>
       </View>
 
-      {/* Employee List Header */}
-      <View style={styles.listHeader}>
-        <Button
-          mode="contained"
-          style={styles.addButton}
-          onPress={() => setIsModalVisible(true)}
-        >
-          Add New Employee
-        </Button>
-        <TextInput placeholder="Search Employee" style={styles.searchInput} />
-      </View>
+      {/* Employee List Section */}
+      <Card style={styles.employeeCard}>
+        <View style={styles.cardHeader}>
+          <Button
+            mode="contained"
+            style={styles.addButton}
+            onPress={() => setIsModalVisible(true)}
+          >
+            Add New Employee
+          </Button>
+          <TextInput
+            placeholder="Search Employee"
+            style={styles.searchInputCard}
+          />
+        </View>
 
-      {/* Employee List */}
-      <FlatList
-        data={employees}
-        renderItem={({ item }) => (
-          <Card style={styles.card}>
-            <Text style={styles.employeeName}>{item.name}</Text>
-            <Text>Time In: {item.timeIn}</Text>
-            <Text>Time Out: {item.timeOut}</Text>
-            <Text>Break: {item.breakTime}</Text>
-          </Card>
-        )}
-        keyExtractor={(item) => item.id}
-      />
+        {/* Scrollable Employee List */}
+        <FlatList
+          data={employees}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Card style={styles.employeeItem}>
+              <Avatar.Text
+                size={40}
+                label={item.name
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")}
+                style={styles.avatar}
+              />
+              <View style={styles.employeeDetails}>
+                <Text style={styles.employeeName}>{item.name}</Text>
+                <Text style={styles.employeeId}>{item.empId}</Text>
+              </View>
+              <Text style={styles.employeeTime}>{item.timeIn}</Text>
+              <Text style={styles.employeeTime}>{item.timeOut}</Text>
+              <Text style={styles.employeeTime}>{item.breakTime}</Text>
+            </Card>
+          )}
+          style={styles.employeeList}
+          contentContainerStyle={styles.employeeListContent}
+        />
+      </Card>
 
       {/* Add Employee Modal */}
       <Modal visible={isModalVisible} animationType="slide" transparent>
@@ -210,8 +183,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     height: 40,
   },
-  datePicker: { marginBottom: 16 },
+  datePicker: { },
   dateItem: {
+    height: "20%",
     padding: 8,
     marginHorizontal: 4,
     backgroundColor: "#ddd",
@@ -225,22 +199,48 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     marginBottom: 16,
+    marginTop: -280,
   },
   chip: { backgroundColor: "#606676", color: "#FFFFFF" },
-  listHeader: {
+  employeeCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 16,
+    flex: 1,
+  },
+  cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
   },
-  addButton: { backgroundColor: "#E2D4F7", borderRadius: 25 },
-  card: {
-    marginBottom: 8,
-    padding: 16,
+  searchInputCard: {
     backgroundColor: "#FFFFFF",
     borderRadius: 8,
+    paddingHorizontal: 8,
+    height: 40,
+    flex: 1,
+    marginLeft: 8,
   },
-  employeeName: { fontWeight: "bold", fontSize: 16, marginBottom: 8 },
+  employeeList: {
+    flex: 1,
+  },
+  employeeListContent: {
+    paddingBottom: 16,
+  },
+  employeeItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+    marginBottom: 4,
+  },
+  avatar: { marginRight: 8, backgroundColor: "#8872A8" },
+  employeeDetails: { flex: 3 },
+  employeeName: { fontWeight: "bold", fontSize: 16 },
+  employeeId: { color: "#606676", fontSize: 12 },
+  employeeTime: { flex: 1, textAlign: "center" },
   modalContainer: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",

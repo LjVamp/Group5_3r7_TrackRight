@@ -9,133 +9,132 @@ import {
   Modal,
   ScrollView,
 } from "react-native";
-import { Card, Button } from "react-native-paper";
+import { Card, Avatar, Button, Chip } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const OwnMenu = () => {
-  const [searchText, setSearchText] = useState("");
-  const [employees, setEmployees] = useState([
-    { id: "1", name: "Ledy Joy Bandiola", email: "ledyjoy@gmail.com", address: "Cagayan de Oro", number: "09123456789", job: "Manager" },
-    { id: "2", name: "Nathalie Jugapao", email: "nathaliej@gmail.com", address: "Iligan City", number: "09987654321", job: "Developer" },
-    { id: "2", name: "Arnado, Rex Z.", email: "arnado.rex16@gmail.com", address: "Cagayan De Oro", number: "09987654321", job: "Developer" },
-  ]);
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [newEmployee, setNewEmployee] = useState({
-    name: "",
-    email: "",
-    address: "",
-    number: "",
-    job: "",
-  });
+const OwnDash = () => {
+  const [employees, setEmployees] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   const handleAddEmployee = () => {
-    if (newEmployee.name.trim() && newEmployee.email.trim()) {
-      const newEmployeeData = {
+    if (firstName.trim() && lastName.trim()) {
+      const newEmployee = {
         id: (employees.length + 1).toString(),
-        ...newEmployee,
+        name: `${firstName} ${lastName}`,
+        employeeId: "2021302136", // Placeholder
+        timeIn: "--:-- AM/PM",
+        timeOut: "--:-- AM/PM",
+        breakTime: "--:--:-- hr",
       };
-      setEmployees([...employees, newEmployeeData]);
-      setModalVisible(false);
-      setNewEmployee({ name: "", email: "", address: "", number: "", job: "" });
+      setEmployees([...employees, newEmployee]);
+      setFirstName("");
+      setLastName("");
+      setIsModalVisible(false);
     } else {
-      alert("Please fill in all required fields (name and email).");
+      alert("Please fill in both first and last names.");
     }
   };
 
-  const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-
   return (
-
-    
     <View style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Icon name="menu" size={24} color="#000" />
-        <TextInput
-          placeholder="Search"
-          style={styles.searchInput}
-          value={searchText}
-          onChangeText={(text) => setSearchText(text)}
-        />
-        <Icon name="notifications" size={24} color="#000" />
+      {/* Filters */}
+      <View style={styles.filters}>
+        <Chip style={styles.chip}>All</Chip>
+        <Chip style={styles.chip}>Employees</Chip>
+        <Chip style={styles.chip}>Active</Chip>
+        <Chip style={styles.chip}>Pending</Chip>
+        <Chip style={styles.chip}>Deactivated</Chip>
       </View>
 
-      {/* Title */}
-      <Text style={styles.title}>Employees</Text>
+      {/* Static Card with Add New Employee and Search */}
+      <Card style={styles.mainCard}>
+        <View style={styles.cardHeader}>
+          <Button
+            mode="contained"
+            style={styles.addButton}
+            onPress={() => setIsModalVisible(true)}
+          >
+            Add New Employee
+          </Button>
+          <TextInput
+            placeholder="Search Employee"
+            style={styles.searchInput}
+          />
+        </View>
 
-      {/* Add Employee Section */}
-      <View style={styles.searchSection}>
-        <Button mode="contained" style={styles.addButton} onPress={() => setModalVisible(true)}>
-          Add New Employee
-        </Button>
-      </View>
+        {/* Header Labels */}
+        <View style={styles.labels}>
+          <Text style={styles.labelText}>Employee Name</Text>
+          <Text style={styles.labelText}>Time In</Text>
+          <Text style={styles.labelText}>Time Out</Text>
+          <Text style={styles.labelText}>Break Time</Text>
+        </View>
 
-      {/* Employee List */}
-      <FlatList
-        data={filteredEmployees}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={{ paddingBottom: 20 }} // Allows space for scrolling
-        renderItem={({ item }) => (
-          <Card style={styles.card}>
-            <View style={styles.cardContent}>
-              <View style={styles.detailsContainer}>
-                <Text style={styles.employeeName}>{item.name}</Text>
-                <Text style={styles.details}>Email: {item.email}</Text>
-                <Text style={styles.details}>Address: {item.address}</Text>
-                <Text style={styles.details}>Phone: {item.number}</Text>
-                <Text style={styles.details}>Job: {item.job}</Text>
+        {/* Scrollable Employee List */}
+        <FlatList
+          data={employees}
+          renderItem={({ item }) => (
+            <Card style={styles.employeeCard}>
+              <View style={styles.employeeRow}>
+                <Avatar.Text
+                  label={item.name
+                    .split(" ")
+                    .map((word) => word[0])
+                    .join("")}
+                  size={40}
+                  style={styles.avatar}
+                />
+                <View style={styles.employeeInfo}>
+                  <Text style={styles.employeeName}>{item.name}</Text>
+                  <Text style={styles.employeeId}>{item.employeeId}</Text>
+                </View>
+                <Text style={styles.employeeData}>{item.timeIn}</Text>
+                <Text style={styles.employeeData}>{item.timeOut}</Text>
+                <Text style={styles.employeeData}>{item.breakTime}</Text>
               </View>
-            </View>
-          </Card>
-        )}
-      />
+            </Card>
+          )}
+          keyExtractor={(item) => item.id}
+          style={styles.employeeList}
+        />
+      </Card>
 
       {/* Add Employee Modal */}
-      <Modal visible={modalVisible} animationType="slide" transparent={true}>
+      <Modal visible={isModalVisible} animationType="slide" transparent>
         <View style={styles.modalContainer}>
-          <ScrollView contentContainerStyle={styles.modalContent}>
+          <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add New Employee</Text>
             <TextInput
-              placeholder="Name"
+              placeholder="First Name"
+              value={firstName}
+              onChangeText={setFirstName}
               style={styles.input}
-              value={newEmployee.name}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, name: text })}
             />
             <TextInput
-              placeholder="Email"
+              placeholder="Last Name"
+              value={lastName}
+              onChangeText={setLastName}
               style={styles.input}
-              value={newEmployee.email}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, email: text })}
             />
-            <TextInput
-              placeholder="Address"
-              style={styles.input}
-              value={newEmployee.address}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, address: text })}
-            />
-            <TextInput
-              placeholder="Phone Number"
-              style={styles.input}
-              keyboardType="phone-pad"
-              value={newEmployee.number}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, number: text })}
-            />
-            <TextInput
-              placeholder="Job"
-              style={styles.input}
-              value={newEmployee.job}
-              onChangeText={(text) => setNewEmployee({ ...newEmployee, job: text })}
-            />
-            <Button mode="contained" onPress={handleAddEmployee} style={styles.addEmployeeButton}>
-              Add Employee
-            </Button>
-            <Button mode="outlined" onPress={() => setModalVisible(false)} style={styles.cancelButton}>
-              Cancel
-            </Button>
-          </ScrollView>
+            <View style={styles.modalButtons}>
+              <Button
+                mode="contained"
+                onPress={handleAddEmployee}
+                style={styles.modalButton}
+              >
+                Add
+              </Button>
+              <Button
+                mode="text"
+                onPress={() => setIsModalVisible(false)}
+                style={styles.modalCancelButton}
+              >
+                Cancel
+              </Button>
+            </View>
+          </View>
         </View>
       </Modal>
     </View>
@@ -144,81 +143,79 @@ const OwnMenu = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#9AA6B2", padding: 16 },
-  header: {
+  filters: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 16,
+  },
+  chip: { backgroundColor: "#606676", color: "#FFFFFF" },
+  mainCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    padding: 16,
+    flex: 1,
+  },
+  cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 16,
   },
+  addButton: { backgroundColor: "#E2D4F7", borderRadius: 25 },
   searchInput: {
     flex: 1,
-    marginHorizontal: 16,
-    backgroundColor: "#FFFFFF",
+    marginLeft: 16,
+    backgroundColor: "#F4F4F4",
     borderRadius: 8,
     paddingHorizontal: 8,
     height: 40,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 16,
-  },
-  searchSection: {
+  labels: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 8,
+    paddingHorizontal: 8,
   },
-  addButton: {
-    backgroundColor: "#ffffff",
+  labelText: { fontWeight: "bold", color: "#333" },
+  employeeList: { flex: 1, marginTop: 8 },
+  employeeCard: {
+    marginBottom: 8,
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: "#F9F9F9",
   },
-  card: {
-    marginVertical: 8,
-    padding: 16,
-    backgroundColor: "rgb(255, 255, 255)"
+  employeeRow: {
+    flexDirection: "row",
+    alignItems: "center",
   },
-  detailsContainer: {
-    marginLeft: 16,
-  },
-  employeeName: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "black",
-  },
-  details: {
-    fontSize: 14,
-    color: "gray",
-  },
+  avatar: { marginRight: 16, backgroundColor: "#8872A8" },
+  employeeInfo: { flex: 2 },
+  employeeName: { fontWeight: "bold" },
+  employeeId: { color: "#666" },
+  employeeData: { flex: 1, textAlign: "center" },
   modalContainer: {
     flex: 1,
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "white",
-    margin: 20,
-    borderRadius: 10,
+    backgroundColor: "#fff",
     padding: 20,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  input: {
-    backgroundColor: "#F0F0F0",
     borderRadius: 8,
-    marginBottom: 10,
-    paddingHorizontal: 10,
+    width: "80%",
+  },
+  modalTitle: { fontSize: 20, fontWeight: "bold", marginBottom: 16 },
+  input: {
+    backgroundColor: "#ddd",
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    marginBottom: 16,
     height: 40,
   },
-  addEmployeeButton: {
-    marginVertical: 10,
-  },
-  cancelButton: {
-    backgroundColor: "#323333",
-  },
+  modalButtons: { flexDirection: "row", justifyContent: "space-between" },
+  modalButton: { flex: 1, marginRight: 8, backgroundColor: "#8872A8" },
+  modalCancelButton: { flex: 1, backgroundColor: "#323333" },
 });
 
-export default OwnMenu;
+export default OwnDash;
