@@ -11,6 +11,7 @@ import Recover from "./components/LoginRegister/Recover";
 import EmpDash from "./components/Dashboard/EmployeeDashboard/EmpDash";
 import EmpLeaveReq from "./components/Dashboard/EmployeeDashboard/EmpLeaveReq";
 import OwnDash from "./components/Dashboard/OwnerDashboard/OwnDash";
+import OwnManReq from "./components/Dashboard/OwnerDashboard/OwnManReq";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name="EmpDash" component={EmpDash} />
           <Stack.Screen name="EmpLeaveReq" component={EmpLeaveReq} />
           <Stack.Screen name="OwnDash" component={OwnDash} />
+          <Stack.Screen name="OwnManReq" component={OwnManReq} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>
