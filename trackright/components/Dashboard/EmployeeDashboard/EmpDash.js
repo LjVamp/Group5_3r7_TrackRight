@@ -11,8 +11,9 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-const EmpDash = () => {
+const EmpDash = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [modalText, setModalText] = useState("");
 
   const openModal = (text) => {
@@ -24,28 +25,21 @@ const EmpDash = () => {
     setModalVisible(false);
   };
 
-  // Dummy data for log reports
+  const toggleMenu = () => {
+    setMenuVisible(!menuVisible);
+  };
+
   const logReports = [
     { date: "2024-12-01", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr", activeTime: "06:30:00 hr" },
     { date: "2024-12-02", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr", activeTime: "06:30:00 hr" },
     { date: "2024-12-03", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr", activeTime: "06:30:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
-    { date: "--", timeIn: "--", timeOut: "--", breakTime: "00:00 hr", activeTime: "00:00:00 hr" },
   ];
 
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={toggleMenu}>
           <Icon name="menu" size={24} color="black" />
         </TouchableOpacity>
         <TextInput
@@ -61,7 +55,6 @@ const EmpDash = () => {
       {/* Centered Floating Card */}
       <View style={styles.cardContainer}>
         <View style={styles.card}>
-          {/* Sticky Title/Header */}
           <View style={styles.stickyHeader}>
             <Text style={styles.cardTitle}>My Log Reports</Text>
             <View style={styles.tableHeader}>
@@ -72,8 +65,6 @@ const EmpDash = () => {
               <Text style={styles.tableHeaderText}>Active Time</Text>
             </View>
           </View>
-
-          {/* Scrollable Table Rows */}
           <ScrollView style={styles.scrollContainer}>
             {logReports.map((log, index) => (
               <View
@@ -123,6 +114,52 @@ const EmpDash = () => {
           </View>
         </Pressable>
       </Modal>
+
+      {/* Floating Menu */}
+      <Modal
+        visible={menuVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={toggleMenu}
+      >
+        <Pressable style={styles.modalOverlay} onPress={toggleMenu}>
+          <View style={styles.menuContainer}>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => {
+                toggleMenu();
+                navigation.navigate("EmpProfile");
+              }}
+            >
+              <Text style={styles.menuText}>Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => {
+                toggleMenu();
+                navigation.navigate("EmpLeaveReq");
+              }}
+            >
+              <Text style={styles.menuText}>Leave Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => {
+                toggleMenu();
+                navigation.navigate("RoleSelection");
+              }}
+            >
+              <Text style={styles.menuText}>Log Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={toggleMenu}
+            >
+              <Text style={styles.menuText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </Pressable>
+      </Modal>
     </View>
   );
 };
@@ -139,7 +176,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     marginHorizontal: 8,
-    backgroundColor: "#e0e0e0", // Light gray for search bar
+    backgroundColor: "#e0e0e0",
     borderRadius: 8,
     paddingHorizontal: 12,
     color: "black",
@@ -224,6 +261,26 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  menuContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 16,
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  menuButton: {
+    padding: 12,
+    width: "100%",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  menuText: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
