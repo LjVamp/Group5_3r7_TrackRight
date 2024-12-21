@@ -15,10 +15,17 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 
 const OwnDash = () => {
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState([
+    { id: "1", name: "Ledy Joy Bandiola", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
+    { id: "2", name: "Nathalie Jugapao", timeIn: "10:38 AM", timeOut: "05:05 PM", breakTime: "01:05 hr" },
+    { id: "3", name: "Afiah Gino", timeIn: "09:40 AM", timeOut: "04:44 PM", breakTime: "01:00 hr" },
+    { id: "4", name: "Rex Arnado", timeIn: "09:00 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
+    { id: "5", name: "Marben Cañizares", timeIn: "08:40 AM", timeOut: "04:40 PM", breakTime: "01:00 hr" },
+  ]);
+
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isNotifVisible, setIsNotifVisible] = useState(false); // For notifications
-  const [menuVisible, setMenuVisible] = useState(false); // For floating menu
+  const [isNotifVisible, setIsNotifVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");

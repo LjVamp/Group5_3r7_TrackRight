@@ -3,11 +3,10 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 const OwnProfile = () => {
-  // Sample user data
   const user = {
     name: "Juana C. Dela Cruz",
     role: "Manager",
-    profileImage: "https://via.placeholder.com/150", // Replace with actual image URL
+    profileImage: "https://via.placeholder.com/150",
   };
 
   return (
@@ -42,13 +41,13 @@ const OwnProfile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#9AA6B2", // Background color matching the design
+    backgroundColor: "#9AA6B2",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 16,
   },
   profileCard: {
-    backgroundColor: "#E6E6FA", // Light purple background for the card
+    backgroundColor: "#E6E6FA",
     borderRadius: 20,
     paddingVertical: 24,
     paddingHorizontal: 16,
