@@ -10,8 +10,10 @@ import Register from "./components/LoginRegister/Register";
 import Recover from "./components/LoginRegister/Recover";
 import EmpDash from "./components/Dashboard/EmployeeDashboard/EmpDash";
 import EmpLeaveReq from "./components/Dashboard/EmployeeDashboard/EmpLeaveReq";
+import EmpDTRCorrection from "./components/Dashboard/EmployeeDashboard/EmpDTRCorrection";
 import OwnDash from "./components/Dashboard/OwnerDashboard/OwnDash";
 import OwnManReq from "./components/Dashboard/OwnerDashboard/OwnManReq";
+import OwnDTRca from "./components/Dashboard/OwnerDashboard/OwnDTRca";
 
 const Stack = createStackNavigator();
 
@@ -27,8 +29,10 @@ export default function App() {
           <Stack.Screen name="Recover" component={Recover} />
           <Stack.Screen name="EmpDash" component={EmpDash} />
           <Stack.Screen name="EmpLeaveReq" component={EmpLeaveReq} />
+          <Stack.Screen name="EmpDTRCorrection" component={EmpDTRCorrection} />
           <Stack.Screen name="OwnDash" component={OwnDash} />
           <Stack.Screen name="OwnManReq" component={OwnManReq} />
+          <Stack.Screen name="OwnDTRca" component={OwnDTRca} />
         </Stack.Navigator>
       </NavigationContainer>
     </PaperProvider>

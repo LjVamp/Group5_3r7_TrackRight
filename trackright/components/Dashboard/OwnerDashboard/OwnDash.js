@@ -16,11 +16,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const OwnDash = () => {
   const [employees, setEmployees] = useState([
-    { id: "1", name: "Ledy Joy Bandiola", timeIn: "10:30 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
-    { id: "2", name: "Nathalie Jugapao", timeIn: "10:38 AM", timeOut: "05:05 PM", breakTime: "01:05 hr" },
-    { id: "3", name: "Afiah Gino", timeIn: "09:40 AM", timeOut: "04:44 PM", breakTime: "01:00 hr" },
-    { id: "4", name: "Rex Arnado", timeIn: "09:00 AM", timeOut: "05:00 PM", breakTime: "01:00 hr" },
-    { id: "5", name: "Marben Cañizares", timeIn: "08:40 AM", timeOut: "04:40 PM", breakTime: "01:00 hr" },
+
   ]);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -140,6 +136,15 @@ const OwnDash = () => {
         </Card>
       </ScrollView>
 
+
+      {/* Scan Button */}
+      <TouchableOpacity
+        style={styles.scanButton}
+        onPress={() => alert("Scan Button Pressed")}
+      >
+        <Text style={styles.scanButtonText}>SCAN QR CODE</Text>
+      </TouchableOpacity>
+
       {/* Floating Menu */}
       <Modal
         visible={menuVisible}
@@ -166,6 +171,15 @@ const OwnDash = () => {
               }}
             >
               <Text style={styles.menuText}>Manage Leave Request</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => {
+                toggleMenu();
+                navigation.navigate("OwnDTRca");
+              }}
+            >
+              <Text style={styles.menuText}>Approve DTR Correction</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.menuButton}
@@ -287,7 +301,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f0f0f0",
     borderRadius: 8,
     padding: 16,
-    height: 680,
+    height: 580,
   },
   cardHeader: {
     flexDirection: "row",
@@ -378,6 +392,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
+  },
+  scanButton: {
+    backgroundColor: "#606676",
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    alignSelf: "center",
+    marginVertical: 45,
+  },
+  scanButtonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

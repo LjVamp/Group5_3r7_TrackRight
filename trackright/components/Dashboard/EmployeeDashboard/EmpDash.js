@@ -146,6 +146,15 @@ const EmpDash = ({ navigation }) => {
               style={styles.menuButton}
               onPress={() => {
                 toggleMenu();
+                navigation.navigate("EmpDTRCorrection");
+              }}
+            >
+              <Text style={styles.menuText}>DTR Correction</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => {
+                toggleMenu();
                 navigation.navigate("RoleSelection");
               }}
             >
